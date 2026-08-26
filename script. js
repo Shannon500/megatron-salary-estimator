@@ -1,0 +1,202 @@
+// Megatron Salary Estimator
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const form = document.getElementById("salaryForm");
+    const salaryInput = document.getElementById("salary");
+    const currencySelect = document.getElementById("currency");
+    const periodSelect = document.getElementById("period");
+
+    const annualResult = document.getElementById("annualResult");
+    const monthlyResult = document.getElementById("monthlyResult");
+    const weeklyResult = document.getElementById("weeklyResult");
+    const dailyResult = document.getElementById("dailyResult");
+    const hourlyResult = document.getElementById("hourlyResult");
+
+    function formatMoney(amount, currency) {
+
+        const symbols = {
+            KES: "KSh",
+            USD: "$",
+            GBP: "£",
+            EUR: "€",
+            ZAR: "R",
+            NGN: "₦",
+            UGX: "USh",
+            TZS: "TSh"
+        };
+
+        const symbol = symbols[currency] || currency;
+
+        return symbol + " " + amount.toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+    }
+
+    function calculateSalary() {
+
+        if (!salaryInput) return;
+
+        let salary = parseFloat(
+            salaryInput.value.replace(/,/g, "")
+        );
+
+        if (isNaN(salary) || salary <= 0) {
+            if (annualResult) annualResult.textContent = "—";
+            if (monthlyResult) monthlyResult.textContent = "—";
+            if (weeklyResult) weeklyResult.textContent = "—";
+            if (dailyResult) dailyResult.textContent = "—";
+            if (hourlyResult) hourlyResult.textContent = "—";
+            return;
+        }
+
+        const currency = currencySelect
+            ? currencySelect.value
+            : "KES";
+
+        const period = periodSelect
+            ? periodSelect.value
+            : "annual";
+
+        let annualSalary;
+
+        // Convert entered salary to annual salary
+
+        if (period === "monthly") {
+            annualSalary = salary * 12;
+
+        } else if (period === "weekly") {
+            annualSalary = salary * 52;
+
+        } else if (period === "daily") {
+            annualSalary = salary * 260;
+
+        } else if (period === "hourly") {
+            annualSalary = salary * 2080;
+
+        } else {
+            annualSalary = salary;
+        }
+
+        // Salary breakdown
+
+        const monthlySalary = annualSalary / 12;
+        const weeklySalary = annualSalary / 52;
+        const dailySalary = annualSalary / 260;
+        const hourlySalary = annualSalary / 2080;
+
+        // Display results
+
+        if (annualResult) {
+            annualResult.textContent =
+                formatMoney(annualSalary, currency);
+        }
+
+        if (monthlyResult) {
+            monthlyResult.textContent =
+                formatMoney(monthlySalary, currency);
+        }
+
+        if (weeklyResult) {
+            weeklyResult.textContent =
+                formatMoney(weeklySalary, currency);
+        }
+
+        if (dailyResult) {
+            dailyResult.textContent =
+                formatMoney(dailySalary, currency);
+        }
+
+        if (hourlyResult) {
+            hourlyResult.textContent =
+                formatMoney(hourlySalary, currency);
+        }
+    }
+
+    // Calculate when the form is submitted
+
+    if (form) {
+
+        form.addEventListener("submit", function (event) {
+
+            event.preventDefault();
+
+            calculateSalary();
+
+        });
+    }
+
+    // Calculate while typing
+
+    if (salaryInput) {
+
+        salaryInput.addEventListener(
+            "input",
+            calculateSalary
+        );
+    }
+
+    // Recalculate when currency changes
+
+    if (currencySelect) {
+
+        currencySelect.addEventListener(
+            "change",
+            calculateSalary
+        );
+    }
+
+    // Recalculate when salary period changes
+
+    if (periodSelect) {
+
+        periodSelect.addEventListener(
+            "change",
+            calculateSalary
+        );
+    }
+
+    // Smooth scrolling
+
+    const links = document.querySelectorAll(
+        'a[href^="#"]'
+    );
+
+    links.forEach(function (link) {
+
+        link.addEventListener("click", function (event) {
+
+            const targetId =
+                link.getAttribute("href");
+
+            const target =
+                document.querySelector(targetId);
+
+            if (target) {
+
+                event.preventDefault();
+
+                target.scrollIntoView({
+                    behavior: "smooth"
+                });
+            }
+        });
+    });
+
+    // Automatically update copyright year
+
+    const yearElement =
+        document.getElementById("year");
+
+    if (yearElement) {
+
+        yearElement.textContent =
+            new Date().getFullYear();
+    }
+
+    // Run calculator once when page loads
+
+    calculateSalary();
+
+});
