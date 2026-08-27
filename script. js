@@ -11,10 +11,10 @@
     const weeksInput = document.getElementById("weeks");
     const taxInput = document.getElementById("tax");
 
-    const resultValues = document.querySelectorAll(".result-card strong");
+    const resultValues = document.querySelectorAll(".result-card");
 
     function money(value) {
-        return "$" + value.toLocaleString("en-US", {
+        return "KSh " + value.toLocaleString("en-KE", {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2
         });
@@ -22,28 +22,46 @@
 
     function calculateSalary() {
 
-        const hourly = parseFloat(hourlyInput.value) || 0;
-        const hours = parseFloat(hoursInput.value) || 0;
-        const weeks = parseFloat(weeksInput.value) || 0;
-        const taxRate = parseFloat(taxInput.value) || 0;
+        const hourly = parseFloat(hourlyInput.value);
+        const hours = parseFloat(hoursInput.value);
+        const weeks = parseFloat(weeksInput.value);
+        const taxRate = parseFloat(taxInput.value);
+
+        if (
+            isNaN(hourly) ||
+            isNaN(hours) ||
+            isNaN(weeks) ||
+            isNaN(taxRate)
+        ) {
+            return;
+        }
 
         const weekly = hourly * hours;
         const annual = weekly * weeks;
         const monthly = annual / 12;
-
-        const tax = annual * (taxRate / 100);
-        const afterTaxAnnual = annual - tax;
+        const daily = weekly / 5;
+        const afterTaxAnnual = annual - (annual * taxRate / 100);
         const afterTaxMonthly = afterTaxAnnual / 12;
 
         if (resultValues.length >= 4) {
-            resultValues[0].textContent = money(hourly);
-            resultValues[1].textContent = money(weekly);
-            resultValues[2].textContent = money(monthly);
-            resultValues[3].textContent = money(annual);
+            resultValues[0].innerHTML =
+                "<span>Hourly</span><strong>" + money(hourly) + "</strong>";
+
+            resultValues[1].innerHTML =
+                "<span>Weekly</span><strong>" + money(weekly) + "</strong>";
+
+            resultValues[2].innerHTML =
+                "<span>Monthly</span><strong>" + money(monthly) + "</strong>";
+
+            resultValues[3].innerHTML =
+                "<span>Annual</span><strong>" + money(annual) + "</strong>";
         }
 
         if (resultValues.length >= 5) {
-            resultValues[4].textContent = money(afterTaxAnnual);
+            resultValues[4].innerHTML =
+                "<span>After Tax Monthly</span><strong>" +
+                money(afterTaxMonthly) +
+                "</strong>";
         }
     }
 
@@ -52,9 +70,9 @@
         calculateSalary();
     });
 
-    inputs.forEach(function (input) {
-        input.addEventListener("input", calculateSalary);
-    });
+    hourlyInput.addEventListener("input", calculateSalary);
+    hoursInput.addEventListener("input", calculateSalary);
+    weeksInput.addEventListener("input", calculateSalary);
+    taxInput.addEventListener("input", calculateSalary);
 
-    calculateSalary();
 });
