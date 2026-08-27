@@ -1,76 +1,194 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Megatron Salary Estimator - estimate your monthly and annual salary from hourly pay, hours worked, and tax rate.">
-  <title>Megatron Salary Estimator</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Megatron Salary Estimator">
+    <title>Megatron Salary Estimator</title>
+
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-  <header class="hero">
-    <nav class="nav">
-      <div class="brand">MEGATRON</div>
-      <span class="tagline">Salary Estimator</span>
-    </nav>
-    <div class="hero-content">
-      <p class="eyebrow">SMART • SIMPLE • FREE</p>
-      <h1>Know what you're worth.</h1>
-      <p>Estimate your hourly, weekly, monthly and annual income in seconds.</p>
-    </div>
-  </header>
 
-  <main class="container">
-    <section class="card calculator">
-      <h2>Salary Calculator</h2>
-      <p class="muted">Enter your pay details below.</p>
+    <header class="hero">
+        <nav class="nav">
+            <div class="brand">MEGATRON</div>
+            <span class="tagline">Salary Estimator</span>
+        </nav>
 
-      <form id="salaryForm">
-        <div class="grid">
-          <label>
-            Hourly pay
-            <div class="input-wrap"><span>$</span><input id="hourlyPay" type="number" min="0" step="0.01" value="15" required></div>
-          </label>
-
-          <label>
-            Hours per week
-            <input id="hours" type="number" min="0" max="168" step="0.5" value="40" required>
-          </label>
-
-          <label>
-            Working weeks per year
-            <input id="weeks" type="number" min="1" max="52" step="1" value="52" required>
-          </label>
-
-          <label>
-            Estimated tax rate
-            <div class="input-wrap"><input id="tax" type="number" min="0" max="100" step="0.1" value="10" required><span>%</span></div>
-          </label>
+        <div class="hero-content">
+            <p class="eyebrow">SMART • SIMPLE • FREE</p>
+            <h1>Know what you're worth.</h1>
+            <p>
+                Estimate your hourly, weekly, monthly and annual salary.
+            </p>
         </div>
+    </header>
 
-        <button type="submit">Calculate salary</button>
-      </form>
-    </section>
 
-    <section id="results" class="results" aria-live="polite">
-      <div class="result-card"><span>Hourly</span><strong id="hourlyResult">$0.00</strong></div>
-      <div class="result-card"><span>Weekly</span><strong id="weeklyResult">$0.00</strong></div>
-      <div class="result-card"><span>Monthly</span><strong id="monthlyResult">$0.00</strong></div>
-      <div class="result-card"><span>Annual</span><strong id="annualResult">$0.00</strong></div>
-      <div class="result-card highlight"><span>Estimated annual take-home</span><strong id="netResult">$0.00</strong></div>
-    </section>
+    <main class="container">
 
-    <section class="info">
-      <h2>How Megatron works</h2>
-      <p>Megatron uses your hourly pay, weekly hours and working weeks to estimate gross income. Your tax percentage is then used to give an approximate take-home figure.</p>
-      <p class="notice"><strong>Note:</strong> This is an estimate, not professional tax or financial advice. Actual taxes and deductions vary by country and individual circumstances.</p>
-    </section>
-  </main>
+        <section class="card calculator">
 
-  <footer>
-    <p>© <span id="year"></span> Megatron Salary Estimator</p>
-  </footer>
+            <h2>Salary Calculator</h2>
 
-  <script src="script.js"></script>
+            <p class="muted">
+                Enter your pay details below.
+            </p>
+
+            <form id="salaryForm">
+
+                <div class="grid">
+
+                    <!-- Hourly Pay -->
+                    <label>
+                        Hourly pay
+
+                        <div class="input-wrap">
+                            <span>$</span>
+                            <input
+                                id="hourly"
+                                type="number"
+                                min="0"
+                                step="0.01"
+                                placeholder="0.00"
+                                required
+                            >
+                        </div>
+                    </label>
+
+
+                    <!-- Hours Per Week -->
+                    <label>
+                        Hours per week
+
+                        <input
+                            id="hours"
+                            type="number"
+                            min="1"
+                            max="168"
+                            value="40"
+                            required
+                        >
+                    </label>
+
+
+                    <!-- Working Weeks -->
+                    <label>
+                        Working weeks per year
+
+                        <input
+                            id="weeks"
+                            type="number"
+                            min="1"
+                            max="52"
+                            value="52"
+                            required
+                        >
+                    </label>
+
+
+                    <!-- Tax Rate -->
+                    <label>
+                        Estimated tax rate
+
+                        <div class="input-wrap">
+                            <input
+                                id="tax"
+                                type="number"
+                                min="0"
+                                max="100"
+                                step="0.1"
+                                value="0"
+                                required
+                            >
+                            <span>%</span>
+                        </div>
+                    </label>
+
+                </div>
+
+
+                <button type="submit">
+                    Calculate salary
+                </button>
+
+            </form>
+
+        </section>
+
+
+        <!-- RESULTS -->
+
+        <section
+            id="results"
+            class="results"
+            aria-live="polite"
+        >
+
+            <div class="result-card">
+                <span>Hourly</span>
+                <strong>$0.00</strong>
+            </div>
+
+            <div class="result-card">
+                <span>Weekly</span>
+                <strong>$0.00</strong>
+            </div>
+
+            <div class="result-card">
+                <span>Monthly</span>
+                <strong>$0.00</strong>
+            </div>
+
+            <div class="result-card">
+                <span>Annual</span>
+                <strong>$0.00</strong>
+            </div>
+
+            <div class="result-card highlight">
+                <span>Estimated monthly after tax</span>
+                <strong>$0.00</strong>
+            </div>
+
+        </section>
+
+
+        <!-- INFORMATION -->
+
+        <section class="info">
+
+            <h2>How Megatron works</h2>
+
+            <p>
+                Megatron uses your hourly pay, hours per week,
+                working weeks per year and estimated tax rate
+                to calculate your salary.
+            </p>
+
+            <p class="notice">
+                <strong>Note:</strong>
+                These calculations are estimates and may not
+                represent your actual take-home pay.
+            </p>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+
+        <p>
+            © <span id="year"></span> Megatron Salary Estimator
+        </p>
+
+    </footer>
+
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+
 </body>
-</html>
+                          </html>
