@@ -1,147 +1,200 @@
-* {
+ * {
   box-sizing: border-box;
 }
 
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: #0b1020;
-  color: #f5f7ff;
+  background: #f4f7fb;
+  color: #172033;
 }
 
-header {
-  text-align: center;
-  padding: 28px 16px;
-  background: #111936;
-  border-bottom: 1px solid #26335f;
+/* HERO */
+
+.hero {
+  background: linear-gradient(135deg, #111827, #1d4ed8);
+  color: white;
+  padding: 20px 18px 55px;
+}
+
+.nav {
+  max-width: 1000px;
+  margin: auto;
 }
 
 .brand {
-  font-size: 30px;
-  font-weight: 900;
-  letter-spacing: 3px;
+  font-size: 25px;
+  font-weight: 800;
+  letter-spacing: 2px;
 }
 
-header p {
-  margin: 6px 0 0;
-  color: #9da9cf;
+.tagline {
+  font-size: 13px;
+  opacity: 0.8;
+  margin-top: 2px;
 }
 
-.container {
-  width: min(720px, 92%);
-  margin: 35px auto;
-}
-
-.hero {
+.hero-content {
+  max-width: 760px;
+  margin: 55px auto 0;
   text-align: center;
-  margin-bottom: 25px;
+}
+
+.eyebrow {
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 2px;
 }
 
 .hero h1 {
-  font-size: 34px;
-  margin-bottom: 10px;
+  margin: 12px 0;
+  font-size: clamp(34px, 8vw, 60px);
 }
 
-.hero p {
-  color: #aeb8d8;
+.hero-content p:last-child {
+  font-size: 17px;
   line-height: 1.6;
+  opacity: 0.9;
+}
+
+/* MAIN */
+
+.container {
+  max-width: 900px;
+  margin: -30px auto 40px;
+  padding: 0 15px;
 }
 
 .card {
-  background: #151d3b;
-  padding: 24px;
+  background: white;
   border-radius: 18px;
-  border: 1px solid #2b3765;
-  box-shadow: 0 12px 35px rgba(0,0,0,.25);
+  padding: 25px;
+  margin-bottom: 20px;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
 }
 
-label {
+h2 {
+  margin-top: 0;
+}
+
+.muted {
+  color: #667085;
+}
+
+/* FORM */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-top: 22px;
+}
+
+.field label {
   display: block;
-  margin: 14px 0 7px;
   font-weight: 700;
+  margin-bottom: 7px;
 }
 
-input, select {
+.field input {
   width: 100%;
   padding: 14px;
+  border: 1px solid #d0d5dd;
   border-radius: 10px;
-  border: 1px solid #394879;
-  background: #0e1530;
-  color: white;
   font-size: 16px;
+  outline: none;
 }
 
-button {
+.field input:focus {
+  border-color: #2563eb;
+}
+
+/* BUTTON */
+
+.calculate-btn {
   width: 100%;
-  margin-top: 22px;
-  padding: 15px;
   border: 0;
-  border-radius: 10px;
-  background: #64e35b;
-  color: #071008;
+  border-radius: 11px;
+  padding: 15px;
+  margin-top: 20px;
+  background: #2563eb;
+  color: white;
   font-size: 17px;
-  font-weight: 800;
+  font-weight: 700;
   cursor: pointer;
 }
 
-button:hover {
-  opacity: .9;
+.calculate-btn:active {
+  transform: scale(0.99);
 }
+
+/* ERROR */
+
+.error {
+  color: #b42318;
+  min-height: 22px;
+  margin-top: 12px;
+  font-weight: 600;
+}
+
+/* RESULTS */
 
 .results {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 14px;
-  margin-top: 20px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 8px;
 }
 
-.result-box {
-  background: #151d3b;
-  border: 1px solid #2b3765;
-  border-radius: 14px;
-  padding: 18px;
+.result-card {
+  background: #f7f9fc;
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
 }
 
-.result-box span {
+.result-card span {
   display: block;
-  color: #9da9cf;
+  color: #667085;
+  font-size: 13px;
   margin-bottom: 8px;
 }
 
-.result-box strong {
-  font-size: 21px;
+.result-card strong {
+  font-size: 20px;
 }
 
-.results .result-box:first-child {
-  grid-column: 1 / -1;
+/* INFORMATION */
+
+.info p,
+.card p {
+  line-height: 1.7;
+  color: #475467;
 }
 
-.error {
-  color: #ff7b7b;
-  min-height: 20px;
-  margin-bottom: 0;
-}
-
-.hidden {
-  display: none;
-}
+/* FOOTER */
 
 footer {
   text-align: center;
-  padding: 30px 15px;
-  color: #7f8ab0;
+  padding: 20px;
+  color: #667085;
 }
 
-@media (max-width: 520px) {
-  .hero h1 {
-    font-size: 28px;
-  }
+/* MOBILE */
 
+@media (max-width: 650px) {
+
+  .grid,
   .results {
     grid-template-columns: 1fr;
   }
 
-  .results .result-box:first-child {
-    grid-column: auto;
+  .hero {
+    padding-bottom: 45px;
   }
+
+  .card {
+    padding: 20px;
+  }
+
 }
