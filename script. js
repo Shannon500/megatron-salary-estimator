@@ -1,91 +1,127 @@
  document.addEventListener("DOMContentLoaded", function () {
 
-    const form = document.getElementById("salaryForm");
+  const form = document.getElementById("salaryForm");
 
-    if (!form) return;
+  const hourlyInput = document.getElementById("hourlyInput");
+  const hoursInput = document.getElementById("hoursInput");
+  const daysInput = document.getElementById("daysInput");
+  const weeksInput = document.getElementById("weeksInput");
+  const taxInput = document.getElementById("taxInput");
 
-    // Inputs
-    const hourlyInput = document.getElementById("hourly");
-    const hoursInput = document.getElementById("hours");
-    const weeksInput = document.getElementById("weeks");
-    const taxInput = document.getElementById("tax");
+  const hourlyResult = document.getElementById("hourlyResult");
+  const dailyResult = document.getElementById("dailyResult");
+  const weeklyResult = document.getElementById("weeklyResult");
+  const monthlyResult = document.getElementById("monthlyResult");
+  const annualResult = document.getElementById("annualResult");
+  const afterTaxResult = document.getElementById("afterTaxResult");
 
-    // Result values
-    const resultValues = document.querySelectorAll(".result-card span");
+  const errorMessage = document.getElementById("errorMessage");
 
-    // Format money
-    function money(value) {
-        return "$" + value.toLocaleString("en-US", {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        });
+
+  function money(value) {
+    return "$" + value.toLocaleString("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+  }
+
+
+  function calculateSalary() {
+
+    errorMessage.textContent = "";
+
+    const hourly = parseFloat(hourlyInput.value);
+    const hours = parseFloat(hoursInput.value);
+    const days = parseFloat(daysInput.value);
+    const weeks = parseFloat(weeksInput.value);
+    const taxRate = parseFloat(taxInput.value);
+
+
+    if (
+      !Number.isFinite(hourly) ||
+      !Number.isFinite(hours) ||
+      !Number.isFinite(days) ||
+      !Number.isFinite(weeks) ||
+      !Number.isFinite(taxRate)
+    ) {
+      errorMessage.textContent =
+        "Please enter numbers in all required fields.";
+      return;
     }
 
-    function calculateSalary() {
 
-        const hourly = parseFloat(hourlyInput ? hourlyInput.value : 0);
-        const hours = parseFloat(hoursInput ? hoursInput.value : 0);
-        const weeks = parseFloat(weeksInput ? weeksInput.value : 0);
-        const taxRate = parseFloat(taxInput ? taxInput.value : 0);
-
-        // Check that the required values are valid
-        if (
-            isNaN(hourly) ||
-            isNaN(hours) ||
-            isNaN(weeks) ||
-            hourly <= 0 ||
-            hours <= 0 ||
-            weeks <= 0
-        ) {
-            return;
-        }
-
-        // Salary calculations
-        const weekly = hourly * hours;
-        const annual = weekly * weeks;
-        const monthly = annual / 12;
-        const daily = weekly / 5;
-
-        // Tax calculation
-        const tax = annual * (taxRate / 100);
-        const afterTaxAnnual = annual - tax;
-        const afterTaxMonthly = afterTaxAnnual / 12;
-
-        // Display results
-        if (resultValues.length >= 4) {
-            resultValues[0].textContent = money(hourly);
-            resultValues[1].textContent = money(weekly);
-            resultValues[2].textContent = money(monthly);
-            resultValues[3].textContent = money(annual);
-        }
-
-        // Estimated tax / after-tax result
-        if (resultValues.length >= 5) {
-            resultValues[4].textContent = money(afterTaxMonthly);
-        }
+    if (hourly < 0 || hours < 0 || days < 0 || weeks < 0) {
+      errorMessage.textContent =
+        "Pay and working hours cannot be negative.";
+      return;
     }
 
-    // Calculate when form is submitted
-    form.addEventListener("submit", function (event) {
-        event.preventDefault();
+
+    if (taxRate < 0 || taxRate > 100) {
+      errorMessage.textContent =
+        "Tax rate must be between 0% and 100%.";
+      return;
+    }
+
+
+    // Calculations
+
+    const daily = hourly * hours;
+
+    const weekly = daily * days;
+
+    const annual = weekly * weeks;
+
+    const monthly = annual / 12;
+
+    const afterTax = annual * (1 - taxRate / 100);
+
+
+    // Display results
+
+    hourlyResult.textContent = money(hourly);
+
+    dailyResult.textContent = money(daily);
+
+    weeklyResult.textContent = money(weekly);
+
+    monthlyResult.textContent = money(monthly);
+
+    annualResult.textContent = money(annual);
+
+    afterTaxResult.textContent = money(afterTax);
+  }
+
+
+  // Calculate when the button is pressed
+
+  form.addEventListener("submit", function (event) {
+
+    event.preventDefault();
+
+    calculateSalary();
+
+  });
+
+
+  // Also update automatically while typing
+
+  [
+    hourlyInput,
+    hoursInput,
+    daysInput,
+    weeksInput,
+    taxInput
+  ].forEach(function (input) {
+
+    input.addEventListener("input", function () {
+
+      if (hourlyInput.value !== "") {
         calculateSalary();
+      }
+
     });
 
-    // Calculate while typing
-    if (hourlyInput) {
-        hourlyInput.addEventListener("input", calculateSalary);
-    }
-
-    if (hoursInput) {
-        hoursInput.addEventListener("input", calculateSalary);
-    }
-
-    if (weeksInput) {
-        weeksInput.addEventListener("input", calculateSalary);
-    }
-
-    if (taxInput) {
-        taxInput.addEventListener("input", calculateSalary);
-    }
+  });
 
 });
