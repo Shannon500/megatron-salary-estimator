@@ -3,234 +3,237 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <meta name="description" content="Megatron Salary Estimator - Calculate your hourly, daily, weekly, monthly and annual salary.">
-
     <title>Megatron Salary Estimator</title>
 
-    <link rel="stylesheet" href="style.css">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f2f4f8;
+            color: #222;
+        }
+
+        header {
+            background: #111827;
+            color: white;
+            text-align: center;
+            padding: 25px 15px;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 30px;
+        }
+
+        header p {
+            margin: 8px 0 0;
+            color: #d1d5db;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .calculator {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 22px;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            background: #2563eb;
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        #results {
+            display: none;
+            margin-top: 25px;
+            background: #f3f4f6;
+            padding: 18px;
+            border-radius: 10px;
+        }
+
+        .result {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .result:last-child {
+            border-bottom: none;
+        }
+
+        .amount {
+            font-weight: bold;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
 </head>
 
 <body>
 
-<header class="hero">
-
-    <nav class="nav">
-        <div class="brand">MEGATRON</div>
-        <div class="tagline">Salary Estimator</div>
-    </nav>
-
-    <div class="hero-content">
-
-        <p class="eyebrow">SMART • SIMPLE • FREE</p>
-
-        <h1>Know What You're Worth.</h1>
-
-        <p>
-            Estimate your hourly, daily, weekly, monthly and annual salary
-            based on your working schedule.
-        </p>
-
-    </div>
-
+<header>
+    <h1>Megatron</h1>
+    <p>Salary Estimator</p>
 </header>
 
+<div class="container">
 
-<main class="container">
+    <div class="calculator">
 
-    <section class="card calculator">
+        <h2>Calculate Your Salary</h2>
 
-        <h2>Salary Calculator</h2>
+        <label for="hourly">Hourly Pay</label>
+        <input
+            type="number"
+            id="hourly"
+            placeholder="Example: 10"
+            min="0"
+            step="0.01"
+        >
 
-        <p class="muted">
-            Enter your pay and working schedule below.
-        </p>
+        <label for="hours">Hours Per Week</label>
+        <input
+            type="number"
+            id="hours"
+            placeholder="Example: 40"
+            min="0"
+            step="0.1"
+            value="40"
+        >
 
+        <button onclick="calculateSalary()">
+            Calculate Salary
+        </button>
 
-        <form id="salaryForm">
+        <div id="results">
 
-            <div class="form-group">
-
-                <label for="hourlyInput">
-                    Hourly Pay
-                </label>
-
-                <input
-                    type="number"
-                    id="hourlyInput"
-                    placeholder="10"
-                    step="0.01"
-                    min="0"
-                    required
-                >
-
+            <div class="result">
+                <span>Hourly:</span>
+                <span class="amount" id="hourlyResult">$0.00</span>
             </div>
 
-
-            <div class="form-group">
-
-                <label for="hoursInput">
-                    Hours Per Day
-                </label>
-
-                <input
-                    type="number"
-                    id="hoursInput"
-                    placeholder="8"
-                    step="0.01"
-                    min="0"
-                    required
-                >
-
+            <div class="result">
+                <span>Daily:</span>
+                <span class="amount" id="dailyResult">$0.00</span>
             </div>
 
-
-            <div class="form-group">
-
-                <label for="daysInput">
-                    Days Per Week
-                </label>
-
-                <input
-                    type="number"
-                    id="daysInput"
-                    placeholder="5"
-                    step="1"
-                    min="0"
-                    required
-                >
-
+            <div class="result">
+                <span>Weekly:</span>
+                <span class="amount" id="weeklyResult">$0.00</span>
             </div>
 
-
-            <div class="form-group">
-
-                <label for="weeksInput">
-                    Weeks Per Year
-                </label>
-
-                <input
-                    type="number"
-                    id="weeksInput"
-                    placeholder="52"
-                    step="1"
-                    min="0"
-                    required
-                >
-
+            <div class="result">
+                <span>Monthly:</span>
+                <span class="amount" id="monthlyResult">$0.00</span>
             </div>
 
-
-            <div class="form-group">
-
-                <label for="taxInput">
-                    Tax Rate (%)
-                </label>
-
-                <input
-                    type="number"
-                    id="taxInput"
-                    placeholder="0"
-                    step="0.01"
-                    min="0"
-                    max="100"
-                    value="0"
-                >
-
-            </div>
-
-
-            <button type="submit">
-                Calculate Salary
-            </button>
-
-        </form>
-
-
-        <div id="errorMessage" class="error-message"></div>
-
-
-        <div class="results">
-
-            <div class="result-box">
-
-                <span>Hourly</span>
-
-                <strong id="hourlyResult">
-                    $0.00
-                </strong>
-
-            </div>
-
-
-            <div class="result-box">
-
-                <span>Daily</span>
-
-                <strong id="dailyResult">
-                    $0.00
-                </strong>
-
-            </div>
-
-
-            <div class="result-box">
-
-                <span>Weekly</span>
-
-                <strong id="weeklyResult">
-                    $0.00
-                </strong>
-
-            </div>
-
-
-            <div class="result-box">
-
-                <span>Monthly</span>
-
-                <strong id="monthlyResult">
-                    $0.00
-                </strong>
-
-            </div>
-
-
-            <div class="result-box">
-
-                <span>Annual</span>
-
-                <strong id="annualResult">
-                    $0.00
-                </strong>
-
-            </div>
-
-
-            <div class="result-box">
-
-                <span>After Tax</span>
-
-                <strong id="afterTaxResult">
-                    $0.00
-                </strong>
-
+            <div class="result">
+                <span>Yearly:</span>
+                <span class="amount" id="yearlyResult">$0.00</span>
             </div>
 
         </div>
 
-    </section>
+    </div>
 
-</main>
-
+</div>
 
 <footer>
-    <p>© 2026 Megatron Salary Estimator. All rights reserved.</p>
+    © 2026 Megatron Salary Estimator
 </footer>
 
 
-<!-- THIS LINE CONNECTS YOUR JAVASCRIPT -->
-<script src="script.js"></script>
+<script>
+
+function calculateSalary() {
+
+    const hourly = parseFloat(
+        document.getElementById("hourly").value
+    );
+
+    const hours = parseFloat(
+        document.getElementById("hours").value
+    );
+
+    if (isNaN(hourly) || hourly < 0) {
+        alert("Please enter your hourly pay.");
+        return;
+    }
+
+    if (isNaN(hours) || hours <= 0) {
+        alert("Please enter your hours per week.");
+        return;
+    }
+
+    const daily = hourly * (hours / 5);
+
+    const weekly = hourly * hours;
+
+    const monthly = weekly * 52 / 12;
+
+    const yearly = weekly * 52;
+
+    document.getElementById("hourlyResult").textContent =
+        "$" + hourly.toFixed(2);
+
+    document.getElementById("dailyResult").textContent =
+        "$" + daily.toFixed(2);
+
+    document.getElementById("weeklyResult").textContent =
+        "$" + weekly.toFixed(2);
+
+    document.getElementById("monthlyResult").textContent =
+        "$" + monthly.toFixed(2);
+
+    document.getElementById("yearlyResult").textContent =
+        "$" + yearly.toFixed(2);
+
+    document.getElementById("results").style.display = "block";
+}
+
+</script>
 
 </body>
-         </html>
+ </html>
