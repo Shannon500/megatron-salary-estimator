@@ -102,6 +102,17 @@
             border-radius: 12px;
         }
 
+        .section-title {
+            margin-top: 20px;
+            margin-bottom: 5px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .section-title:first-child {
+            margin-top: 0;
+        }
+
         .result {
             display: flex;
             justify-content: space-between;
@@ -124,11 +135,16 @@
             font-weight: bold;
         }
 
-        .section-title {
-            margin-top: 25px;
-            margin-bottom: 5px;
-            font-size: 18px;
+        .net {
+            font-size: 20px;
             font-weight: bold;
+        }
+
+        .note {
+            margin-top: 20px;
+            font-size: 13px;
+            color: #666;
+            line-height: 1.5;
         }
 
         footer {
@@ -154,8 +170,9 @@
         <h2>Calculate Your Salary</h2>
 
         <p class="description">
-            Estimate your regular earnings and overtime pay.
+            Estimate your earnings, overtime, deductions and take-home pay.
         </p>
+
 
         <label for="currency">Currency</label>
 
@@ -216,6 +233,19 @@
         </select>
 
 
+        <label for="deduction">Estimated Deductions (%)</label>
+
+        <input
+            type="number"
+            id="deduction"
+            placeholder="Example: 10"
+            min="0"
+            max="100"
+            step="0.1"
+            value="10"
+        >
+
+
         <button onclick="calculateSalary()">
             Calculate Salary
         </button>
@@ -224,7 +254,7 @@
         <div id="results">
 
             <div class="section-title">
-                Regular Pay
+                Earnings
             </div>
 
             <div class="result">
@@ -237,42 +267,78 @@
                 <span class="amount" id="regularWeeklyResult"></span>
             </div>
 
-
-            <div class="section-title">
-                Overtime
-            </div>
-
-            <div class="result">
-                <span>Overtime Rate:</span>
-                <span class="amount" id="rateResult"></span>
-            </div>
-
             <div class="result">
                 <span>Overtime Weekly:</span>
                 <span class="amount" id="overtimeResult"></span>
             </div>
 
-
-            <div class="section-title">
-                Total Estimated Earnings
-            </div>
-
             <div class="result total">
-                <span>Weekly:</span>
+                <span>Gross Weekly:</span>
                 <span class="amount" id="weeklyResult"></span>
             </div>
 
             <div class="result total">
-                <span>Monthly:</span>
+                <span>Gross Monthly:</span>
                 <span class="amount" id="monthlyResult"></span>
             </div>
 
             <div class="result total">
-                <span>Yearly:</span>
+                <span>Gross Yearly:</span>
                 <span class="amount" id="yearlyResult"></span>
             </div>
 
+
+            <div class="section-title">
+                Deductions
+            </div>
+
+            <div class="result">
+                <span>Deduction Rate:</span>
+                <span class="amount" id="deductionRateResult"></span>
+            </div>
+
+            <div class="result">
+                <span>Weekly Deduction:</span>
+                <span class="amount" id="weeklyDeductionResult"></span>
+            </div>
+
+            <div class="result">
+                <span>Monthly Deduction:</span>
+                <span class="amount" id="monthlyDeductionResult"></span>
+            </div>
+
+            <div class="result">
+                <span>Yearly Deduction:</span>
+                <span class="amount" id="yearlyDeductionResult"></span>
+            </div>
+
+
+            <div class="section-title">
+                Estimated Take-Home Pay
+            </div>
+
+            <div class="result net">
+                <span>Weekly:</span>
+                <span class="amount" id="weeklyNetResult"></span>
+            </div>
+
+            <div class="result net">
+                <span>Monthly:</span>
+                <span class="amount" id="monthlyNetResult"></span>
+            </div>
+
+            <div class="result net">
+                <span>Yearly:</span>
+                <span class="amount" id="yearlyNetResult"></span>
+            </div>
+
         </div>
+
+
+        <p class="note">
+            This calculator provides estimates only. Actual taxes and deductions
+            vary by country, employer and individual circumstances.
+        </p>
 
     </div>
 
@@ -304,45 +370,75 @@ function calculateSalary() {
         document.getElementById("overtimeRate").value
     );
 
+    const deduction = parseFloat(
+        document.getElementById("deduction").value
+    );
+
     const currency =
         document.getElementById("currency").value;
 
 
     if (isNaN(hourly) || hourly < 0) {
-
         alert("Please enter your hourly pay.");
-
         return;
     }
 
 
     if (isNaN(hours) || hours < 0) {
-
         alert("Please enter your regular hours per week.");
-
         return;
     }
 
 
     if (isNaN(overtime) || overtime < 0) {
-
         alert("Please enter your overtime hours.");
-
         return;
     }
 
 
-    const regularWeekly = hourly * hours;
+    if (isNaN(deduction) || deduction < 0 || deduction > 100) {
+        alert("Please enter a deduction percentage between 0 and 100.");
+        return;
+    }
 
-    const overtimeHourly = hourly * overtimeRate;
 
-    const overtimeWeekly = overtimeHourly * overtime;
+    const regularWeekly =
+        hourly * hours;
 
-    const totalWeekly = regularWeekly + overtimeWeekly;
+    const overtimeHourly =
+        hourly * overtimeRate;
 
-    const monthly = totalWeekly * 52 / 12;
+    const overtimeWeekly =
+        overtimeHourly * overtime;
 
-    const yearly = totalWeekly * 52;
+    const grossWeekly =
+        regularWeekly + overtimeWeekly;
+
+    const grossMonthly =
+        grossWeekly * 52 / 12;
+
+    const grossYearly =
+        grossWeekly * 52;
+
+
+    const weeklyDeduction =
+        grossWeekly * deduction / 100;
+
+    const monthlyDeduction =
+        grossMonthly * deduction / 100;
+
+    const yearlyDeduction =
+        grossYearly * deduction / 100;
+
+
+    const weeklyNet =
+        grossWeekly - weeklyDeduction;
+
+    const monthlyNet =
+        grossMonthly - monthlyDeduction;
+
+    const yearlyNet =
+        grossYearly - yearlyDeduction;
 
 
     document.getElementById("hourlyResult").textContent =
@@ -351,20 +447,40 @@ function calculateSalary() {
     document.getElementById("regularWeeklyResult").textContent =
         currency + " " + regularWeekly.toFixed(2);
 
-    document.getElementById("rateResult").textContent =
-        overtimeRate.toFixed(1) + "×";
-
     document.getElementById("overtimeResult").textContent =
         currency + " " + overtimeWeekly.toFixed(2);
 
     document.getElementById("weeklyResult").textContent =
-        currency + " " + totalWeekly.toFixed(2);
+        currency + " " + grossWeekly.toFixed(2);
 
     document.getElementById("monthlyResult").textContent =
-        currency + " " + monthly.toFixed(2);
+        currency + " " + grossMonthly.toFixed(2);
 
     document.getElementById("yearlyResult").textContent =
-        currency + " " + yearly.toFixed(2);
+        currency + " " + grossYearly.toFixed(2);
+
+
+    document.getElementById("deductionRateResult").textContent =
+        deduction.toFixed(1) + "%";
+
+    document.getElementById("weeklyDeductionResult").textContent =
+        currency + " " + weeklyDeduction.toFixed(2);
+
+    document.getElementById("monthlyDeductionResult").textContent =
+        currency + " " + monthlyDeduction.toFixed(2);
+
+    document.getElementById("yearlyDeductionResult").textContent =
+        currency + " " + yearlyDeduction.toFixed(2);
+
+
+    document.getElementById("weeklyNetResult").textContent =
+        currency + " " + weeklyNet.toFixed(2);
+
+    document.getElementById("monthlyNetResult").textContent =
+        currency + " " + monthlyNet.toFixed(2);
+
+    document.getElementById("yearlyNetResult").textContent =
+        currency + " " + yearlyNet.toFixed(2);
 
 
     document.getElementById("results").style.display = "block";
@@ -373,4 +489,4 @@ function calculateSalary() {
 </script>
 
 </body>
- </html>
+                                                           </html>
